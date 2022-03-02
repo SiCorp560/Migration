@@ -14,11 +14,16 @@ public class PlayerController : MonoBehaviour
     // The animator component which animates the player's sprite
     public Animator animator;
 
+    // The CharacterController2D script which moves the player
+    public CharacterController2D controller;
+
     // The speed of movement for the player (set in editor)
     public float moveSpeed;
 
-    // Used to flip the player's sprite with direction of motion
-    private bool left = true;
+    // Used to keep track of player movement during gameplay
+    private float xMove;
+    private bool jump;
+
 
     private void Awake()
     {
@@ -44,6 +49,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void GetBigger()
+    {
+        // Increase the scale of this game object
+        transform.localScale = transform.localScale * 1.3f;
+    }
+
     private void Update()
     {
         // Move the player character
@@ -56,24 +67,39 @@ public class PlayerController : MonoBehaviour
         // Right now GetAxisRaw and directly set velocity, not at all drifty
 
         // Check for horizontal movement input
-        float xMove = Input.GetAxisRaw("Horizontal") * moveSpeed;
+        xMove = Input.GetAxisRaw("Horizontal") * moveSpeed;
 
-        // Directly modify the player's horizontal velocity
-        rb.velocity = new Vector2(xMove, rb.velocity.y);
+        if (Input.GetButtonDown("Jump"))
+            jump = true;
 
         // Update the player's animation
         animator.SetInteger("Speed", (int)Mathf.Abs(xMove));
+    }
 
-        // Flip the sprite when player moves other way (assumes sprite faces left)
-        if (left && rb.velocity.x < 0)
-        {
-            left = false;
-            sprite.flipX = false;
-        }
-        else if (!left && rb.velocity.x > 0)
-        {
-            left = true;
-            sprite.flipX = true;
-        }
+    private void FixedUpdate()
+    {
+        // Update the character's movement during fixed update
+        controller.Move(xMove * Time.fixedDeltaTime, false, jump);
+        
+        // Reset the jump flag
+        if (jump)
+            jump = false;
     }
 }
+
+/*
+// Used to flip the player's sprite with direction of motion
+private bool left = true;
+
+// Flip the sprite when player moves other way (assumes sprite faces left)
+if (left && rb.velocity.x < 0)
+{
+    left = false;
+    sprite.flipX = false;
+}
+else if (!left && rb.velocity.x > 0)
+{
+    left = true;
+    sprite.flipX = true;
+}
+*/
