@@ -119,4 +119,9 @@ public class PlayerFlyController : MonoBehaviour
         rb.gravityScale = 0.0f;
         stunned = false;
     }
+
+    public bool isStunned()
+    {
+        return stunned;
+    }
 }
