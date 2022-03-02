@@ -50,13 +50,6 @@ public class GameManager : MonoBehaviour
     //    DontDestroyOnLoad(this);
     //}
 
-    private void Update()
-    {
-        // Use the R key to restart the level
-        if (Input.GetKeyDown(KeyCode.R))
-            LevelManager.S.RestartLevel();
-    }
-
     /* Used to start the game/round */
 
     public void InitializeNewGame()

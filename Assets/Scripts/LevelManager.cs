@@ -47,6 +47,17 @@ public class LevelManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+    private void Update()
+    {
+        // Use the R key to restart the level
+        if (Input.GetKeyDown(KeyCode.R))
+            RestartLevel();
+
+        // Use the Escape key to close the game
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
+    }
+
     ///* LevelManager automatically starts the game */
     //private void Start()
     //{
@@ -71,6 +82,9 @@ public class LevelManager : MonoBehaviour
     public void RoundWin()
     {
         SceneManager.LoadScene(nextScene);
+
+        if (nextScene.Equals("Room3"))
+            AudioManager.S?.Play("Rain");
     }
 
     /* If player fails during playing state */
