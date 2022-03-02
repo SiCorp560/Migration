@@ -13,7 +13,6 @@ public class Hazard : MonoBehaviour
             PlayerFlyController flyPlayer = collision.gameObject.GetComponent<PlayerFlyController>();
             if (flyPlayer != null)
             {
-                Debug.Log("Knocking down the player.");
                 flyPlayer.KnockDown();
             }
         }

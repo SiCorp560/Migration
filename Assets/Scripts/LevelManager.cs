@@ -8,9 +8,9 @@ public class LevelManager : MonoBehaviour
     // singleton declaration
     public static LevelManager S;
 
-    //[Header("Level Info")]
-    //// string to display at the level start
-    //public string levelName;
+    [Header("Level Info")]
+    // string to display at the level start
+    public string levelName;
 
     //// checkpoint location in this level
     //public Vector3 checkpoint = Vector3.zero;
@@ -30,11 +30,11 @@ public class LevelManager : MonoBehaviour
     //public GameObject platformPrefab;
     //public GameObject platformObject;
 
-    //[Header("Scene Info")]
-    //// name of the scene to go to after this
-    //public string nextScene;
-    //// is this the end of the game
-    //public bool finalScene;
+    [Header("Scene Info")]
+    // name of the scene to go to after this
+    public string nextScene;
+    // is this the end of the game
+    public bool finalScene;
 
     private void Awake()
     {
@@ -67,11 +67,11 @@ public class LevelManager : MonoBehaviour
     //    }
     //}
 
-    ///* If player achieves victory during playing state */
-    //public void RoundWin()
-    //{
-    //    SceneManager.LoadScene(nextScene);
-    //}
+    /* If player achieves victory during playing state */
+    public void RoundWin()
+    {
+        SceneManager.LoadScene(nextScene);
+    }
 
     /* If player fails during playing state */
     public void RestartLevel()
@@ -105,12 +105,11 @@ public class LevelManager : MonoBehaviour
     //    GameManager.S.StartRound();
     //}
 
-    ///* After the game is over, or if player backed out of game */
-    //public void ReturnToMainMenu()
-    //{
-    //    Destroy(GameManager.S.gameObject);
-    //    SceneManager.LoadScene("TitleMenu");
-    //}
+    /* After the game is over, or if player backed out of game */
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene("TitleMenu");
+    }
 
     ///* Allows other scripts to set the checkpoint bool */
     //public void SetCheckpoint(bool active)

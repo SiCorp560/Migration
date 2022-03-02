@@ -101,6 +101,10 @@ public class PlayerFlyController : MonoBehaviour
         // Change to the stunned state (changes movement controls)
         stunned = true;
 
+        // Play sound effect
+        if (AudioManager.S != null)
+            AudioManager.S.Play("Chime");
+
         // Turn the sprite blue (to indicate wet?)
         sprite.color = new Color(0.8f, 1.0f, 1.0f);
 

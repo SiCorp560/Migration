@@ -8,9 +8,6 @@ public class Checkpoint : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // play the checkpoint/end of level sound
-            // SoundManager.S. ... ;
-
             // tell GameManager that player reached a checkpoint
             GameManager.S.TriggerCheckpoint();
         }

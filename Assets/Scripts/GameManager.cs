@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
     {
         // The player has reached a checkpoint
         // For now, the only checkpoint is at the end of the level
-        Debug.Log("You win!");
+        StartCoroutine(LevelComplete());
     }
 
     public void Metamorphosis()
@@ -154,6 +154,11 @@ public class GameManager : MonoBehaviour
         // Spawn the butterfly version of the player in the same place
         GameObject flyPlayer = Instantiate(butterflyPrefab);
         flyPlayer.transform.position = playerPosition;
+
+        // TODO: Right now, the chomping sound effect delays the evolution jingle,
+        // so once we have an actual transformation visual, add this back in
+        // Play sound effect to signal change
+        // AudioManager.S.Play("Evolution");
     }
 
     //private IEnumerator CountdownTimer()
@@ -181,15 +186,6 @@ public class GameManager : MonoBehaviour
     //    PlayerLost();
     //}
 
-    //public void PlayerKilledEnemy()
-    //{
-    //    // add to the player's score
-    //    score += 200;
-
-    //    // update the score display
-    //    scoreOverlay.text = score.ToString("0000");
-    //}
-
     //public void PlayerCollectedCoin()
     //{
     //    // add to the player's score
@@ -197,37 +193,6 @@ public class GameManager : MonoBehaviour
 
     //    // update the score display
     //    scoreOverlay.text = score.ToString("0000");
-    //}
-
-    //public void PlayerCollectedOneUp()
-    //{
-    //    // give the player an extra life
-    //    livesLeft++;
-
-    //    // update the lives display
-    //    livesOverlay.text = livesLeft.ToString();
-    //}
-
-    //public void PlayerReachedCheckpoint()
-    //{
-    //    // tell LevelManager that player hit checkpoint
-    //    LevelManager.S.SetCheckpoint(true);
-
-    //    // display checkpoint message
-    //    StartCoroutine(CheckpointMessage());
-    //}
-
-    //public IEnumerator CheckpointMessage()
-    //{
-    //    // turn on the checkpoint message
-    //    messageOverlay.enabled = true;
-    //    messageOverlay.text = "Checkpoint Reached";
-
-    //    // pause here for a moment
-    //    yield return new WaitForSeconds(2.0f);
-
-    //    // turn off the checkpoint message
-    //    messageOverlay.enabled = false;
     //}
 
     ///* GameState: after playing is over */
@@ -282,54 +247,36 @@ public class GameManager : MonoBehaviour
     //    LevelManager.S.RestartLevelCheckpoint();
     //}
 
-    //public void GameOverState(bool victory)
-    //{
-    //    // go into gameover state
-    //    gameState = GameState.gameOver;
+    private IEnumerator LevelComplete()
+    {
+        // transition state while we wait after winning
+        gameState = GameState.roundWin;
 
-    //    // stop the game timer
-    //    if (levelTimer != null)
-    //    {
-    //        StopCoroutine(levelTimer);
-    //        levelTimer = null;
-    //    }
+        // play victory fanfare
+        if (AudioManager.S != null)
+            AudioManager.S.Play("MysteriousJingle");
 
-    //    // diverges here based on whether the player won
-    //    if (victory)
-    //        StartCoroutine(LevelComplete());
-    //    else
-    //        StartCoroutine(GameOverLose());
-    //}
+        // turn on the level complete message
+        // messageOverlay.enabled = true;
+        // messageOverlay.text = "Congratulations!\nYou Win!";
 
-    //private IEnumerator LevelComplete()
-    //{
-    //    // transition state while we wait after winning
-    //    gameState = GameState.roundWin;
+        // pause here for a moment
+        yield return new WaitForSeconds(4.0f);
 
-    //    // play victory fanfare
-    //    SoundManager.S.PlayFanfareClip();
+        if (LevelManager.S.finalScene)
+        {
+            // send back to main menu
+            // messageOverlay.text = "Press the Back button\nto return to main menu";
 
-    //    // turn on the level complete message
-    //    messageOverlay.enabled = true;
-    //    messageOverlay.text = "Congratulations!\nYou Win!";
-
-    //    // pause here for a moment
-    //    yield return new WaitForSeconds(4.0f);
-
-    //    if (LevelManager.S.finalScene)
-    //    {
-    //        // send back to main menu
-    //        // messageOverlay.text = "Press the Back button\nto return to main menu";
-
-    //        // turn on the back button
-    //        // backButton.SetActive(true);
-    //    }
-    //    else
-    //    {
-    //        // go to the next round
-    //        LevelManager.S.RoundWin();
-    //    }
-    //}
+            // turn on the back button
+            // backButton.SetActive(true);
+        }
+        else
+        {
+            // go to the next round
+            LevelManager.S.RoundWin();
+        }
+    }
 
     //private IEnumerator GameOverLose()
     //{
@@ -352,5 +299,4 @@ public class GameManager : MonoBehaviour
     //    // reset the level
     //    // LevelManager.S.RestartLevel();
     //}
-
 }

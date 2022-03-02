@@ -15,7 +15,8 @@ public class PowerUp : MonoBehaviour
             collected = true;
 
             // play the powerup collection sound
-            // SoundManager.S.PlayPowerUpSound();
+            if (AudioManager.S != null)
+                AudioManager.S.Play("CaterpillarBite");
 
             // tell GameManager that player collected powerup
             GameManager.S.CollectLeaf();
