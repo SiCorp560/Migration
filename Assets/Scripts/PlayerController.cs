@@ -37,11 +37,13 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("Player doesn't have rigidbody component.");
             rb = GetComponent<Rigidbody2D>();
         }
+        /*
         if (sprite == null)
         {
             Debug.LogError("Player doesn't have sprite renderer component.");
             sprite = GetComponent<SpriteRenderer>();
         }
+        */
         if (animator == null)
         {
             Debug.LogError("Player doesn't have animator component.");
