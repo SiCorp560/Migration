@@ -345,7 +345,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState: 0
   totalLeafCount: 3
-  butterflyPrefab: {fileID: 530733631527827823, guid: 26a5e78c77534d24b9fe059150a97d26, type: 3}
+  butterflyPrefab: {fileID: 4456995020339112744, guid: 3a9b41efd086b4e8498013948122dd1a, type: 3}
+  spawnPoint: {fileID: 0}
 --- !u!4 &191148562
 Transform:
   m_ObjectHideFlags: 0
@@ -1606,6 +1607,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bc982029e090e6409115b976ac84161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sprite: {fileID: 747377492}
+  active: 0
 --- !u!1 &843749874
 GameObject:
   m_ObjectHideFlags: 0
@@ -2228,7 +2231,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -339.18494, y: 178.40369}
+  m_AnchoredPosition: {x: -315, y: 164}
   m_SizeDelta: {x: 18.3515, y: 29.9292}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1260900127
