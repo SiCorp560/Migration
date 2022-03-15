@@ -345,7 +345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState: 0
   totalLeafCount: 3
-  butterflyPrefab: {fileID: 530733631527827823, guid: 26a5e78c77534d24b9fe059150a97d26, type: 3}
+  butterflyPrefab: {fileID: 4456995020339112744, guid: 3a9b41efd086b4e8498013948122dd1a, type: 3}
 --- !u!4 &191148562
 Transform:
   m_ObjectHideFlags: 0
