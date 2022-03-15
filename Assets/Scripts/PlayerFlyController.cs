@@ -11,25 +11,28 @@ public class PlayerFlyController : MonoBehaviour
     public Rigidbody2D rb;
     // The sprite renderer component which controls the player's sprite
     public SpriteRenderer sprite;
-
-    // The CharacterController2D script which moves the player
-    public CharacterController2D controller;
+    // The animator component which animates the player's sprite
+    public Animator animator;
+    // The transform position which indicates the ground
+    public Vector2 groundOffset;
 
     // The speed of movement for the player (set in editor)
     public float moveSpeed;
 
-    // Used to keep track of player movement during gameplay
-    private float xMove;
-    private float yMove;
-    private bool jump;
+    // Used to flip the player's sprite with direction of motion
+    private bool left = true;
 
-    // The player's flying state
+    // Used to track player's movement state during gameplay
     private bool flying = false;
+    private bool onGround = true;
+    
+    // Used to track the player's stamina throughout the level
+    public int defaultStamina;
+    public int slowdownTime;
+    private int maxStamina;
 
-    // Parameters used to time
-    private bool startFlyTimer = false;
-    private int defaultStamina = 1;
-    public int maxStamina;
+    // Used to track the coroutine which controls the player's flight stamina
+    private Coroutine flyingCoroutine = null;
 
     // Used to mark the stunned state after hit by water droplet
     private bool stunned = false;
@@ -56,72 +59,73 @@ public class PlayerFlyController : MonoBehaviour
         maxStamina = defaultStamina;
     }
 
-    private void Update()
+    private void StartFlying()
     {
-        // Change flying state as appropriate
-        if (controller.IsGrounded())
-        {
-            flying = false;
-            startFlyTimer = true;
-        }
+        // Turn off gravity for rigidbody and push up
+        rb.gravityScale = 0.0f;
 
-        // Move the player character
-        UpdateMovement();
-
-        // If flying, update stamina
-        if (flying && startFlyTimer)
-        {
-            StartCoroutine(FlyStamina());
-        }
+        // Set the state to flying
+        onGround = false;
+        flying = true;
+        flyingCoroutine = StartCoroutine(FlyStamina());
+        
+        // TODO: Switch to flying animation?
     }
 
-    private void UpdateMovement()
+    private void StopFlying()
     {
-        // TODO: Decide the best physics for controlling the player
-        // Right now GetAxisRaw and directly set velocity, not at all drifty
+        // Turn gravity on for the rigidbody
+        rb.gravityScale = 2.0f;
 
-        // Check for horizontal & vertical movement input
-        xMove = Input.GetAxisRaw("Horizontal");
-        yMove = Input.GetAxisRaw("Vertical");
+        // Set the state to on the ground
+        flying = false;
+        StopCoroutine(flyingCoroutine);
 
-        if (!controller.IsGrounded() && yMove > 0 && startFlyTimer)
+        // TODO: Switch to walking animation?
+        animator.SetFloat("flapSpeed", 1.0f);
+    }
+
+    private void Update()
+    {
+        // Update the player's current movement state
+        if (onGround && !stunned)
         {
-            flying = true;
+            // Stop flying if the butterfly touches the ground
+            if (flying)
+                StopFlying();
+            // Start flying if butterfly is on ground and jumps
+            if (Input.GetAxisRaw("Vertical") == 1.0f)
+                StartFlying();
         }
 
-        // When stunned, you can only move left and right
+        // Check for horizontal & vertical movement input
+        float xMove = Input.GetAxisRaw("Horizontal");
+        float yMove = Input.GetAxisRaw("Vertical");
+
+        // Movement depends on the current state of the butterfly
         if (stunned)
         {
+            // Halve the player's movement speed
             xMove /= 2;
 
             // Directly update the player's velocity
             rb.velocity = new Vector2(xMove * moveSpeed, rb.velocity.y);
         }
+        else if (flying)
+        {
+            // Make sure moving diagonally doesn't give you extra speed
+            Vector2 moveVector = new Vector2(xMove, yMove);
+
+            // Directly update the player's velocity
+            rb.velocity = moveVector.normalized * moveSpeed;
+        }
         else
         {
-            if (flying)
-            {
-                // Make sure moving diagonally doesn't give you extra speed
-                Vector2 moveVector = new Vector2(xMove, yMove);
-
-                // Directly update the player's velocity
-                rb.velocity = moveVector.normalized * moveSpeed;
-            }
-            else
-            {
-                // Directly update the player's velocity
-                rb.velocity = new Vector2(xMove * moveSpeed, rb.velocity.y);
-
-                if (Input.GetButtonDown("Jump"))
-                    jump = true;
-            }
+            // Directly update the player's velocity
+            rb.velocity = new Vector2(xMove * moveSpeed, rb.velocity.y);
         }
 
-        // Used to flip the player's sprite with direction of motion
-        //private bool left = true;
-
         // Flip the sprite when player moves other way (assumes sprite faces left)
-        /*
         if (left && rb.velocity.x < 0)
         {
             left = false;
@@ -131,47 +135,47 @@ public class PlayerFlyController : MonoBehaviour
         {
             left = true;
             sprite.flipX = true;
-        */
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Respawn")) //&& !collision.gameObject.GetComponent<Checkpoint>().IsActive())
-        {
-            Debug.Log("tag");
-            maxStamina += 1;
         }
     }
 
-    private void FixedUpdate()
+    // Triggered by the checkpoint, to prevent double activation
+    public void IncreaseStamina()
     {
-        // Update the character's movement during fixed update
-        controller.Move(xMove * Time.fixedDeltaTime, false, jump);
-        
-        // Reset the jump flag
-        if (jump)
-            jump = false;
+        maxStamina += 1;
     }
 
     private IEnumerator FlyStamina()
     {
-        // Turn off check for timer to start
-        startFlyTimer = false;
-
-        // Turn off gravity for rigidbody
-        //rb.gravityScale = 0.0f;
-
-        int i = maxStamina;
-        while (i > 0)
+        int timeLeft = maxStamina;
+        while (timeLeft > 0)
         {
-            i -= 1;
+            // Wait for a second
             yield return new WaitForSeconds(1.0f);
+
+            // Update the timer
+            timeLeft -= 1;
         }
 
-        // Turn on gravity for rigidbody
-        //rb.gravityScale = 2.0f;
+        // Transition from normal flying to slowed down flying
+        float animSpeed = 0.5f;
+        animator.SetFloat("flapSpeed", animSpeed);
 
-        flying = false;
+        timeLeft = slowdownTime;
+        while (timeLeft > 0)
+        {
+            // Wait for a second
+            yield return new WaitForSeconds(1.0f);
+
+            // Update the timer
+            timeLeft -= 1;
+
+            // Update the player's animation
+            animSpeed = Mathf.Lerp(0.1f, 0.5f, (float)timeLeft / (float)slowdownTime);
+            animator.SetFloat("flapSpeed", animSpeed);
+        }
+
+        // When timer runs out, cancel flying ability
+        StopFlying();
     }
 
     public void KnockDown()
@@ -188,6 +192,10 @@ public class PlayerFlyController : MonoBehaviour
         // Change to the stunned state (changes movement controls)
         stunned = true;
 
+        // If the player is flying, stop that
+        if (flying)
+            StopFlying();
+
         // Play sound effect
         if (AudioManager.S != null)
             AudioManager.S.Play("Chime");
@@ -195,20 +203,24 @@ public class PlayerFlyController : MonoBehaviour
         // Turn the sprite blue (to indicate wet?)
         sprite.color = new Color(0.8f, 1.0f, 1.0f);
 
-        // Turn on gravity for the rigidbody
-        //rb.gravityScale = 2.0f;
-
         // Player stays stunned for a little while
         yield return new WaitForSeconds(3.0f);
 
         // Goes back to normal
         sprite.color = Color.white;
-        //rb.gravityScale = 0.0f;
         stunned = false;
     }
 
-    public bool isStunned()
+    public bool IsStunned()
     {
         return stunned;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Ground"))
+        {
+            onGround = true;
+        }
     }
 }

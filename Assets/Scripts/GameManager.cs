@@ -139,6 +139,10 @@ public class GameManager : MonoBehaviour
         // The player has reached a checkpoint
         spawnPoint = point;
 
+        // play fanfare
+        if (AudioManager.S != null)
+            AudioManager.S.Play("MysteriousJingle");
+
         // For now, the only checkpoint is at the end of the level
         //StartCoroutine(LevelComplete());
     }

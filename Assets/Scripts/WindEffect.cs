@@ -16,7 +16,7 @@ public class WindEffect : MonoBehaviour
             if (objects[i].CompareTag("Player"))
             {
                 PlayerFlyController flyPlayer = objects[i].GetComponent<PlayerFlyController>();
-                if (flyPlayer != null && flyPlayer.isStunned())
+                if (flyPlayer != null && flyPlayer.IsStunned())
                 {
                     windSpeed = 10;
                 }

@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-    // The sprite renderer component which controls the player's sprite
+    // The sprite renderer component which controls the checkpoint sprite
     public SpriteRenderer sprite;
 
+    // Used to prevent double-activating a checkpoint
     public bool active = false;
 
     private void Start()
     {
         if (sprite == null)
         {
-            Debug.LogError("Player doesn't have sprite renderer component.");
+            Debug.LogError("Checkpoint doesn't have sprite renderer component.");
             sprite = GetComponent<SpriteRenderer>();
         }
     }
@@ -25,13 +26,11 @@ public class Checkpoint : MonoBehaviour
             active = true;
             sprite.color = Color.white;
 
-            // tell GameManager that player reached a checkpoint
+            // Tell GameManager that player reached a checkpoint
             GameManager.S.TriggerCheckpoint(transform);
-        }
-    }
 
-    public bool IsActive()
-    {
-        return active;
+            if (PlayerFlyController.player != null)
+                PlayerFlyController.player.IncreaseStamina();
+        }
     }
 }
