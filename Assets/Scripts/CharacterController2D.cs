@@ -146,7 +146,7 @@ public class CharacterController2D : MonoBehaviour
 		transform.localScale = theScale;
 	}
 
-	public bool isGrounded()
+	public bool IsGrounded()
 	{
 		return m_Grounded;
 	}

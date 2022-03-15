@@ -23,9 +23,6 @@ public class PlayerFlyController : MonoBehaviour
     private float yMove;
     private bool jump;
 
-    // Used to flip the player's sprite with direction of motion
-    private bool left = true;
-
     // The player's flying state
     private bool flying = false;
 
@@ -62,7 +59,7 @@ public class PlayerFlyController : MonoBehaviour
     private void Update()
     {
         // Change flying state as appropriate
-        if (controller.isGrounded())
+        if (controller.IsGrounded())
         {
             flying = false;
             startFlyTimer = true;
@@ -87,7 +84,7 @@ public class PlayerFlyController : MonoBehaviour
         xMove = Input.GetAxisRaw("Horizontal");
         yMove = Input.GetAxisRaw("Vertical");
 
-        if (!controller.isGrounded() && yMove > 0 && startFlyTimer)
+        if (!controller.IsGrounded() && yMove > 0 && startFlyTimer)
         {
             flying = true;
         }
@@ -120,6 +117,9 @@ public class PlayerFlyController : MonoBehaviour
             }
         }
 
+        // Used to flip the player's sprite with direction of motion
+        //private bool left = true;
+
         // Flip the sprite when player moves other way (assumes sprite faces left)
         /*
         if (left && rb.velocity.x < 0)
@@ -132,6 +132,14 @@ public class PlayerFlyController : MonoBehaviour
             left = true;
             sprite.flipX = true;
         */
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Respawn") && !collision.gameObject.GetComponent<Checkpoint>().IsActive())
+        {
+            maxStamina += 2;
+        }
     }
 
     private void FixedUpdate()
