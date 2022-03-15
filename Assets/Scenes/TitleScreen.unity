@@ -531,7 +531,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: {fileID: 0}
   Settings: {fileID: 0}
-  FirstLevelName: Room1
+  FirstLevelName: Level2Test
 --- !u!1 &1255464393
 GameObject:
   m_ObjectHideFlags: 0
