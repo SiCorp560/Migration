@@ -216,9 +216,19 @@ public class PlayerFlyController : MonoBehaviour
         return stunned;
     }
 
+    /*
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Ground"))
+        {
+            onGround = true;
+        }
+    }
+    */
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ground"))
         {
             onGround = true;
         }
