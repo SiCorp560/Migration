@@ -7,7 +7,7 @@ public class Checkpoint : MonoBehaviour
     // The sprite renderer component which controls the player's sprite
     public SpriteRenderer sprite;
 
-    private bool active = false;
+    public bool active = false;
 
     private void Start()
     {

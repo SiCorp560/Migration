@@ -28,7 +28,7 @@ public class PlayerFlyController : MonoBehaviour
 
     // Parameters used to time
     private bool startFlyTimer = false;
-    private int defaultStamina = 3;
+    private int defaultStamina = 1;
     public int maxStamina;
 
     // Used to mark the stunned state after hit by water droplet
@@ -136,9 +136,10 @@ public class PlayerFlyController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Respawn") && !collision.gameObject.GetComponent<Checkpoint>().IsActive())
+        if (collision.gameObject.CompareTag("Respawn")) //&& !collision.gameObject.GetComponent<Checkpoint>().IsActive())
         {
-            maxStamina += 2;
+            Debug.Log("tag");
+            maxStamina += 1;
         }
     }
 

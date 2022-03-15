@@ -174,7 +174,7 @@ MonoBehaviour:
   rb: {fileID: 4456995020339112742}
   sprite: {fileID: 4456995020339112737}
   controller: {fileID: 4217592697293383369}
-  moveSpeed: 5
+  moveSpeed: 7
   maxStamina: 0
 --- !u!70 &4456995020339112747
 CapsuleCollider2D:
