@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
     // TODO: Move these to a LevelManager script
     public GameObject butterflyPrefab;
 
+    // Current spawn location
+    public Transform spawnPoint;
+
     /* Before anything happens, initialization of object */
 
     private void Awake()
@@ -131,11 +134,13 @@ public class GameManager : MonoBehaviour
             Metamorphosis();
     }
 
-    public void TriggerCheckpoint()
+    public void TriggerCheckpoint(Transform point)
     {
         // The player has reached a checkpoint
+        spawnPoint = point;
+
         // For now, the only checkpoint is at the end of the level
-        StartCoroutine(LevelComplete());
+        //StartCoroutine(LevelComplete());
     }
 
     public void Metamorphosis()

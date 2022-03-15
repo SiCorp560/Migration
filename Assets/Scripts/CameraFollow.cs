@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    /*
     public GameObject player;
     public float smoothTime;
     public float floorBound, ceilingBound;
@@ -22,12 +21,16 @@ public class CameraFollow : MonoBehaviour
         Vector3 cameraPosition = transform.position;
 
         // move the camera to the right
+        /*
         if (playerPosition.x > cameraPosition.x)
         {
             cameraPosition.x = Mathf.SmoothDamp(cameraPosition.x, playerPosition.x, ref xVelocity, smoothTime);
         }
+        */
+        cameraPosition.x = Mathf.SmoothDamp(cameraPosition.x, playerPosition.x, ref xVelocity, smoothTime);
 
         // adjust the height of the camera
+        /*
         if (cameraPosition.y - playerPosition.y > floorOffset)
         {
             float yPos = Mathf.SmoothDamp(cameraPosition.y, Mathf.Max(playerPosition.y, floorBound), ref yVelocity, smoothTime);            
@@ -38,10 +41,12 @@ public class CameraFollow : MonoBehaviour
             float yPos = Mathf.SmoothDamp(cameraPosition.y, Mathf.Min(playerPosition.y, ceilingBound), ref yVelocity, smoothTime);
             cameraPosition.y = yPos;
         }
+        */
+        cameraPosition.y = Mathf.SmoothDamp(cameraPosition.y, playerPosition.y, ref yVelocity, smoothTime);
         
         transform.position = cameraPosition;
     }
-
+/*
     public void UpdatePlayer(GameObject newPlayer)
     {
         // update the player tracking object
