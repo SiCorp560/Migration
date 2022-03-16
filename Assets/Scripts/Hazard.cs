@@ -17,6 +17,11 @@ public class Hazard : MonoBehaviour
             }
         }
 
+        // TODO: Right now, can hear all water droplets in the level
+        // Play the sound of water droplet colliding
+        //if (AudioManager.S != null)
+        //    AudioManager.S.Play("Droplet");
+
         // Always destroy the water when it collides with something
         Destroy(gameObject);
     }
