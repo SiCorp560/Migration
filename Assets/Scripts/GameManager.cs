@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     // Game State
     public GameState gameState;
 
+    // UI Elements
+    public inGameMenu gameMenu;
+
     /*
     // UI Elements
     public TextMeshProUGUI messageOverlay, livesOverlay, scoreOverlay, countdownOverlay;
@@ -134,7 +137,7 @@ public class GameManager : MonoBehaviour
             Metamorphosis();
     }
 
-    public void TriggerCheckpoint(Transform point)
+    public void TriggerCheckpoint(Transform point, bool final)
     {
         // The player has reached a checkpoint
         spawnPoint = point;
@@ -143,8 +146,11 @@ public class GameManager : MonoBehaviour
         if (AudioManager.S != null)
             AudioManager.S.Play("MysteriousJingle");
 
-        // For now, the only checkpoint is at the end of the level
-        //StartCoroutine(LevelComplete());
+        // If this is a checkpoint at the end of the level, trigger end screen
+        if (final)
+        {
+            gameMenu.EndLevelLoad();
+        }
     }
 
     public void Metamorphosis()

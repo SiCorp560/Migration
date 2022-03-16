@@ -11,6 +11,7 @@ public class inGameMenu : MonoBehaviour
     public GameObject PauseScreen;
     public GameObject ControlsScreen;
     public GameObject SettingsScreen;
+    public GameObject EndLevelScreen;
     public string levelSelectScreen;
     public string nextLevelName;
 
@@ -75,6 +76,15 @@ public class inGameMenu : MonoBehaviour
     {
         SettingsScreen.SetActive(false);
         PauseScreen.SetActive(true);
+    }
+
+    public void EndLevelLoad()
+    {
+        // Just in case
+        PauseScreen.SetActive(false);
+        ControlsScreen.SetActive(false);
+        
+        EndLevelScreen.SetActive(true);
     }
 
     public void ReturnMenu()
