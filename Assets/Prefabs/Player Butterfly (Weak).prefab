@@ -173,9 +173,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 4456995020339112742}
   sprite: {fileID: 4456995020339112737}
-  controller: {fileID: 4217592697293383369}
+  animator: {fileID: 0}
+  groundOffset: {x: 0, y: 0}
   moveSpeed: 7
-  maxStamina: 0
+  defaultStamina: 0
+  slowdownTime: 2
+  defaultWebCount: 10
 --- !u!70 &4456995020339112747
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

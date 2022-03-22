@@ -31,12 +31,19 @@ public class PlayerFlyController : MonoBehaviour
     public int slowdownTime;
     private int maxStamina;
 
+    // Used to track the player's flap power
+    private int flapPower = 1;
+
     // Used to track the coroutine which controls the player's flight stamina
     private Coroutine flyingCoroutine = null;
 
     // Used to mark the stunned state after hit by water droplet
     private bool stunned = false;
 
+    // Used to mark trapped state after hit by spider
+    private bool trapped = false;
+    public int defaultWebCount;
+    private int trappedWebCount;
 
     private void Awake()
     {
@@ -57,6 +64,7 @@ public class PlayerFlyController : MonoBehaviour
         }
 
         maxStamina = defaultStamina;
+        trappedWebCount = defaultWebCount;
     }
 
     private void StartFlying()
@@ -88,7 +96,7 @@ public class PlayerFlyController : MonoBehaviour
     private void Update()
     {
         // Update the player's current movement state
-        if (onGround && !stunned)
+        if (onGround && !stunned && !trapped)
         {
             // Stop flying if the butterfly touches the ground
             if (flying)
@@ -110,6 +118,20 @@ public class PlayerFlyController : MonoBehaviour
 
             // Directly update the player's velocity
             rb.velocity = new Vector2(xMove * moveSpeed, rb.velocity.y);
+        }
+        else if (trapped)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                if (trappedWebCount > 0)
+                {
+                    trappedWebCount -= flapPower;
+                }
+                else
+                {
+                    FreeFromWeb();
+                }
+            }
         }
         else if (flying)
         {
@@ -216,21 +238,45 @@ public class PlayerFlyController : MonoBehaviour
         return stunned;
     }
 
-    /*
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Ground"))
-        {
-            onGround = true;
-        }
-    }
-    */
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Ground"))
         {
             onGround = true;
         }
+        else if (collision.CompareTag("Spider"))
+        {
+            TrapInWeb();
+        }
+    }
+
+    private void TrapInWeb()
+    {
+        trapped = true;
+            
+        // If the player is flying, stop that
+        if (flying)
+            StopFlying();
+
+        // Play sound effect, TEMPORARY!!!
+        if (AudioManager.S != null)
+            AudioManager.S.Play("Chime");
+
+        // Turn the sprite gray to indicate trapped, TEMPORARY!!!
+        sprite.color = Color.gray;
+    }
+
+    private void FreeFromWeb()
+    {
+        trapped = false;
+
+        trappedWebCount = defaultWebCount;
+
+        // Play sound effect, TEMPORARY!!!
+        if (AudioManager.S != null)
+            AudioManager.S.Play("Chime");
+
+        // Turn the sprite white to indicate trapped, TEMPORARY!!!
+        sprite.color = Color.white;
     }
 }
