@@ -29,7 +29,7 @@ public class PlayerFlyController : MonoBehaviour
     // Used to track the player's stamina throughout the level
     public int defaultStamina;
     public int slowdownTime;
-    private int maxStamina;
+    public int maxStamina;  // Made public in order to manip thru editor
 
     // Used to track the player's flap power
     private int flapPower = 1;
