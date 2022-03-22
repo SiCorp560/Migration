@@ -27,6 +27,10 @@ public class PlayerFlyController : MonoBehaviour
     // Used to flip the player's sprite with direction of motion
     private bool left = true;
 
+    // The current state of movement, reflected in the sprite
+    /* 0: OnGround and not moving, 1: walking, 2: flying, 3: flapping */
+    private readonly int IDLE = 0, WALK = 1, FLY = 2, FLAP = 3;
+
     // Used to track player's movement state during gameplay
     private bool flying = false;
     private bool onGround = true;
@@ -82,8 +86,6 @@ public class PlayerFlyController : MonoBehaviour
         onGround = false;
         flying = true;
         flyingCoroutine = StartCoroutine(FlyStamina());
-        
-        // TODO: Switch to flying animation?
     }
 
     private void StopFlying()
@@ -91,12 +93,13 @@ public class PlayerFlyController : MonoBehaviour
         // Turn gravity on for the rigidbody
         rb.gravityScale = 2.0f;
 
-        // Set the state to on the ground
+        // Disable the flying variables
         flying = false;
         StopCoroutine(flyingCoroutine);
 
-        // TODO: Switch to walking animation?
-        animator.SetFloat("flapSpeed", 1.0f);
+        // Cancel any flapping (can't gust while out of stamina)
+        if (flapping)
+            StopFlapping();
     }
 
     private void StartFlapping()
@@ -105,12 +108,11 @@ public class PlayerFlyController : MonoBehaviour
         flapping = true;
 
         // Signal the flapping animation
-        animator.SetBool("gust", true);
+        animator.SetInteger("state", FLAP);
 
         // Enable the gust (collider, visual effects)
         gustCollider.enabled = true;
         gustParticles.Play();
-
         //gustObject.SetActive(true);
     }
 
@@ -120,7 +122,7 @@ public class PlayerFlyController : MonoBehaviour
         flapping = false;
 
         // Signal the flapping animation to stop
-        animator.SetBool("gust", false);
+        animator.SetInteger("state", FLY);
 
         // Disable the gust (collider, visual effects)
         gustCollider.enabled = false;
@@ -135,17 +137,26 @@ public class PlayerFlyController : MonoBehaviour
         {
             // Stop flying if the butterfly touches the ground
             if (flying)
+            {
                 StopFlying();
+                animator.SetInteger("state", IDLE);
+                animator.SetFloat("flapSpeed", 1.0f);
+            }
             // Start flying if butterfly is on ground and "jumps"
             if (Input.GetAxisRaw("Vertical") == 1.0f)
+            {
                 StartFlying();
+                animator.SetInteger("state", FLY);
+            }
         }
 
         // Update the state based on whether player is flapping to create gust
         if (flying && Input.GetButtonDown("Flap"))
             StartFlapping();
         else if (flapping && Input.GetButtonUp("Flap"))
+        {
             StopFlapping();
+        }
 
         // Player can't move while flapping
         if (!flapping)
@@ -176,11 +187,22 @@ public class PlayerFlyController : MonoBehaviour
 
                 // Directly update the player's velocity
                 rb.velocity = moveVector.normalized * moveSpeed;
+
+                // Update to the flying animation
+                animator.SetInteger("state", FLY);
             }
             else
             {
                 // Directly update the player's velocity, horizontally
                 rb.velocity = new Vector2(xMove * walkingSpeed, rb.velocity.y);
+
+                // Update animation based on movement
+                if (!onGround)
+                    animator.SetInteger("state", FLY);
+                else if (xMove == 0.0f)
+                    animator.SetInteger("state", IDLE);
+                else
+                    animator.SetInteger("state", WALK);
             }
 
             // Flip the sprite when player moves other way (assumes sprite faces left)
@@ -188,13 +210,11 @@ public class PlayerFlyController : MonoBehaviour
             {
                 left = false;
                 transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));
-                //sprite.flipX = false;
             }
             else if (!left && rb.velocity.x > 0)
             {
                 left = true;
                 transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));
-                //sprite.flipX = true;
             }
         }
     }
