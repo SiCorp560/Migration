@@ -146,9 +146,9 @@ MonoBehaviour:
   groundOffset: {x: 0, y: -0.3}
   gustCollider: {fileID: 6849668116013098733}
   gustParticles: {fileID: 6849668117003017828}
-  moveSpeed: 7
+  moveSpeed: 8
   walkingSpeed: 3
-  defaultStamina: 2
+  defaultStamina: 0
   slowdownTime: 2
   maxStamina: 0
   defaultWebCount: 0
