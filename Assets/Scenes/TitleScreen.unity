@@ -923,6 +923,18 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: Level 2
+    clip: {fileID: 8300000, guid: 20f9bc558dd9afb44bb9d6558257126e, type: 3}
+    volume: 0.7
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Level 3
+    clip: {fileID: 8300000, guid: 107918a4a0b8ce349868ac9c2ec957c7, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
 --- !u!4 &1966730145
 Transform:
   m_ObjectHideFlags: 0
