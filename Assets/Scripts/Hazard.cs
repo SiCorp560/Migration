@@ -12,9 +12,7 @@ public class Hazard : MonoBehaviour
         {
             PlayerFlyController flyPlayer = collision.gameObject.GetComponent<PlayerFlyController>();
             if (flyPlayer != null)
-            {
                 flyPlayer.KnockDown();
-            }
         }
 
         // TODO: Right now, can hear all water droplets in the level

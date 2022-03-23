@@ -82,9 +82,6 @@ public class LevelManager : MonoBehaviour
     public void RoundWin()
     {
         SceneManager.LoadScene(nextScene);
-
-        if (nextScene.Equals("Room3"))
-            AudioManager.S?.Play("Rain");
     }
 
     /* If player fails during playing state */
