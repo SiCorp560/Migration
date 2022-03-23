@@ -19,7 +19,7 @@ public class PowerUp : MonoBehaviour
                 AudioManager.S.Play("CaterpillarBite");
 
             // tell GameManager that player collected powerup
-            GameManager.S.CollectLeaf();
+            // GameManager.S.CollectLeaf();
 
             // destroy this object
             Destroy(gameObject);

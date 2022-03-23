@@ -1788,7 +1788,7 @@ Canvas:
   m_GameObject: {fileID: 2391082067673174155}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 1
@@ -1797,8 +1797,8 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1910558865
+  m_SortingOrder: 10000
   m_TargetDisplay: 0
 --- !u!114 &2391082067673174157
 MonoBehaviour:
@@ -1812,7 +1812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1855,6 +1855,7 @@ MonoBehaviour:
   PauseScreen: {fileID: 2391082066508059230}
   ControlsScreen: {fileID: 2391082067643307665}
   SettingsScreen: {fileID: 2391082066860872083}
+  EndLevelScreen: {fileID: 0}
   levelSelectScreen: LevelSelect
   nextLevelName: 
 --- !u!1 &2391082067737423163

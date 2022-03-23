@@ -27,10 +27,6 @@ public class GameManager : MonoBehaviour
     //private int timeLeft;
     //private Coroutine levelTimer;
 
-    // Gameplay variables for the caterpillar levels
-    public int totalLeafCount;
-    private int leafCount;
-
     // TODO: Move these to a LevelManager script
     public GameObject butterflyPrefab;
 
@@ -61,7 +57,6 @@ public class GameManager : MonoBehaviour
     public void InitializeNewGame()
     {
         // reset game variables
-        leafCount = 0;
 
         //livesLeft = LIVES_START;
         //score = SCORE_START;
@@ -123,20 +118,6 @@ public class GameManager : MonoBehaviour
 
     /* GameState: while playing */
 
-    public void CollectLeaf()
-    {
-        // The player has collected a leaf, add to their total
-        leafCount++;
-
-        // Make the player bigger
-        if (leafCount < totalLeafCount)
-            PlayerController.player.GetBigger();
-
-        // Transform into a butterfly
-        if (leafCount >= totalLeafCount)
-            Metamorphosis();
-    }
-
     public void TriggerCheckpoint(Transform point, bool final)
     {
         // The player has reached a checkpoint
@@ -151,22 +132,6 @@ public class GameManager : MonoBehaviour
         {
             gameMenu.EndLevelLoad();
         }
-    }
-
-    public void Metamorphosis()
-    {
-        // Remove the caterpillar version of the player
-        Vector3 playerPosition = PlayerController.player.gameObject.transform.position;
-        Destroy(PlayerController.player.gameObject);
-
-        // Spawn the butterfly version of the player in the same place
-        GameObject flyPlayer = Instantiate(butterflyPrefab);
-        flyPlayer.transform.position = playerPosition;
-
-        // TODO: Right now, the chomping sound effect delays the evolution jingle,
-        // so once we have an actual transformation visual, add this back in
-        // Play sound effect to signal change
-        // AudioManager.S.Play("Evolution");
     }
 
     //private IEnumerator CountdownTimer()
