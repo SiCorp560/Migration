@@ -13,6 +13,9 @@ public class Checkpoint : MonoBehaviour
     // Used to prevent double-activating a checkpoint
     public bool active = false;
 
+    // Particle prefab
+    public GameObject particlePrefab;
+
     private void Start()
     {
         if (sprite == null)
@@ -27,7 +30,8 @@ public class Checkpoint : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") && !active)
         {
             active = true;
-            sprite.color = Color.white;
+            GameObject particles = Instantiate(particlePrefab, transform.position, Quaternion.identity);
+            Destroy(particles, 1.0f);
 
             // Tell GameManager that player reached a checkpoint
             GameManager.S.TriggerCheckpoint(transform, finalCheckpoint);
