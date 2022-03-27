@@ -12,6 +12,10 @@ public class titleMenu : MonoBehaviour
     public void PlayGame () 
     {
         SceneManager.LoadScene(FirstLevelName);
+
+        // Temporary, just to show off new music
+        AudioManager.S?.Pause("BackgroundMusic");
+        AudioManager.S?.Play("Level 2");
     }
 
     public void QuitGame ()
