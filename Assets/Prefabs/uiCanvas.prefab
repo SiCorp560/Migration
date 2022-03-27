@@ -2610,11 +2610,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-<<<<<<< HEAD
-  m_Text: gust
-=======
   m_Text: create gust
->>>>>>> main
 --- !u!1 &2391082068165009610
 GameObject:
   m_ObjectHideFlags: 0
