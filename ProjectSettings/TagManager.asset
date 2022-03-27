@@ -6,6 +6,8 @@ TagManager:
   tags:
   - WaterDrop
   - Ground
+  - Spider
+  - Gust
   layers:
   - Default
   - TransparentFX

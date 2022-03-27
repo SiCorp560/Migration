@@ -15,12 +15,21 @@ public class PlayerFlyController : MonoBehaviour
     public Animator animator;
     // The transform position which indicates the ground
     public Vector2 groundOffset;
+    // The trigger collider which indicates the gust area
+    public BoxCollider2D gustCollider;
+    // The particle system which visualizes the gust (may update)
+    public ParticleSystem gustParticles;
 
     // The speed of movement for the player (set in editor)
     public float moveSpeed;
+    public float walkingSpeed; // Should be slower than normal movement
 
     // Used to flip the player's sprite with direction of motion
     private bool left = true;
+
+    // The current state of movement, reflected in the sprite
+    /* 0: OnGround and not moving, 1: walking, 2: flying, 3: flapping */
+    private readonly int IDLE = 0, WALK = 1, FLY = 2, FLAP = 3;
 
     // Used to track player's movement state during gameplay
     private bool flying = false;
@@ -29,7 +38,11 @@ public class PlayerFlyController : MonoBehaviour
     // Used to track the player's stamina throughout the level
     public int defaultStamina;
     public int slowdownTime;
-    private int maxStamina;
+    public int maxStamina;  // Made public in order to manip thru editor
+
+    // Used to track the player's flapping to create gusts
+    private int flapPower = 1;
+    private bool flapping = false;
 
     // Used to track the coroutine which controls the player's flight stamina
     private Coroutine flyingCoroutine = null;
@@ -37,6 +50,10 @@ public class PlayerFlyController : MonoBehaviour
     // Used to mark the stunned state after hit by water droplet
     private bool stunned = false;
 
+    // Used to mark trapped state after hit by spider
+    private bool trapped = false;
+    public int defaultWebCount;
+    private int trappedWebCount;
 
     private void Awake()
     {
@@ -57,6 +74,7 @@ public class PlayerFlyController : MonoBehaviour
         }
 
         maxStamina = defaultStamina;
+        trappedWebCount = defaultWebCount;
     }
 
     private void StartFlying()
@@ -68,8 +86,6 @@ public class PlayerFlyController : MonoBehaviour
         onGround = false;
         flying = true;
         flyingCoroutine = StartCoroutine(FlyStamina());
-        
-        // TODO: Switch to flying animation?
     }
 
     private void StopFlying()
@@ -77,64 +93,129 @@ public class PlayerFlyController : MonoBehaviour
         // Turn gravity on for the rigidbody
         rb.gravityScale = 2.0f;
 
-        // Set the state to on the ground
+        // Disable the flying variables
         flying = false;
         StopCoroutine(flyingCoroutine);
 
-        // TODO: Switch to walking animation?
-        animator.SetFloat("flapSpeed", 1.0f);
+        // Cancel any flapping (can't gust while out of stamina)
+        if (flapping)
+            StopFlapping();
+    }
+
+    private void StartFlapping()
+    {
+        // Set the state to flapping
+        flapping = true;
+
+        // Signal the flapping animation
+        animator.SetInteger("state", FLAP);
+
+        // Enable the gust (collider, visual effects)
+        gustCollider.enabled = true;
+        gustParticles.Play();
+        //gustObject.SetActive(true);
+    }
+
+    private void StopFlapping()
+    {
+        // Set the state to not flapping
+        flapping = false;
+
+        // Signal the flapping animation to stop
+        animator.SetInteger("state", FLY);
+
+        // Disable the gust (collider, visual effects)
+        gustCollider.enabled = false;
+        gustParticles.Stop();
+        //gustObject.SetActive(false);
     }
 
     private void Update()
     {
         // Update the player's current movement state
-        if (onGround && !stunned)
+        if (onGround && !stunned && !trapped)
         {
             // Stop flying if the butterfly touches the ground
             if (flying)
+            {
                 StopFlying();
-            // Start flying if butterfly is on ground and jumps
+                animator.SetInteger("state", IDLE);
+                animator.SetFloat("flapSpeed", 1.0f);
+            }
+            // Start flying if butterfly is on ground and "jumps"
             if (Input.GetAxisRaw("Vertical") == 1.0f)
+            {
                 StartFlying();
+                animator.SetInteger("state", FLY);
+            }
         }
 
-        // Check for horizontal & vertical movement input
-        float xMove = Input.GetAxisRaw("Horizontal");
-        float yMove = Input.GetAxisRaw("Vertical");
-
-        // Movement depends on the current state of the butterfly
-        if (stunned)
+        // Update the state based on whether player is flapping to create gust
+        if (flying && Input.GetButtonDown("Flap"))
+            StartFlapping();
+        else if (flapping && Input.GetButtonUp("Flap"))
         {
-            // Halve the player's movement speed
-            xMove /= 2;
-
-            // Directly update the player's velocity
-            rb.velocity = new Vector2(xMove * moveSpeed, rb.velocity.y);
-        }
-        else if (flying)
-        {
-            // Make sure moving diagonally doesn't give you extra speed
-            Vector2 moveVector = new Vector2(xMove, yMove);
-
-            // Directly update the player's velocity
-            rb.velocity = moveVector.normalized * moveSpeed;
-        }
-        else
-        {
-            // Directly update the player's velocity
-            rb.velocity = new Vector2(xMove * moveSpeed, rb.velocity.y);
+            StopFlapping();
         }
 
-        // Flip the sprite when player moves other way (assumes sprite faces left)
-        if (left && rb.velocity.x < 0)
+        // Player can't move while flapping
+        if (!flapping)
         {
-            left = false;
-            sprite.flipX = false;
-        }
-        else if (!left && rb.velocity.x > 0)
-        {
-            left = true;
-            sprite.flipX = true;
+            // Check for horizontal & vertical movement input
+            float xMove = Input.GetAxisRaw("Horizontal");
+            float yMove = Input.GetAxisRaw("Vertical");
+
+            // Halve the player's movement when stunned
+            if (stunned)
+            {
+                xMove /= 2;
+                yMove /= 2; // Shouldn't matter?
+            }
+
+            // Movement depends on the current state of the butterfly
+            if (trapped && Input.GetButtonDown("Flap"))
+            {
+                if (trappedWebCount > 0)
+                    trappedWebCount -= flapPower;
+                else
+                    FreeFromWeb();
+            }
+            else if (flying)
+            {
+                // Make sure moving diagonally doesn't give you extra speed
+                Vector2 moveVector = new Vector2(xMove, yMove);
+
+                // Directly update the player's velocity
+                rb.velocity = moveVector.normalized * moveSpeed;
+
+                // Update to the flying animation
+                animator.SetInteger("state", FLY);
+            }
+            else
+            {
+                // Directly update the player's velocity, horizontally
+                rb.velocity = new Vector2(xMove * walkingSpeed, rb.velocity.y);
+
+                // Update animation based on movement
+                if (!onGround)
+                    animator.SetInteger("state", FLY);
+                else if (xMove == 0.0f)
+                    animator.SetInteger("state", IDLE);
+                else
+                    animator.SetInteger("state", WALK);
+            }
+
+            // Flip the sprite when player moves other way (assumes sprite faces left)
+            if (left && rb.velocity.x < 0)
+            {
+                left = false;
+                transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));
+            }
+            else if (!left && rb.velocity.x > 0)
+            {
+                left = true;
+                transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));
+            }
         }
     }
 
@@ -216,21 +297,45 @@ public class PlayerFlyController : MonoBehaviour
         return stunned;
     }
 
-    /*
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Ground"))
-        {
-            onGround = true;
-        }
-    }
-    */
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Ground"))
         {
             onGround = true;
         }
+        else if (collision.CompareTag("Spider"))
+        {
+            TrapInWeb();
+        }
+    }
+
+    private void TrapInWeb()
+    {
+        trapped = true;
+            
+        // If the player is flying, stop that
+        if (flying)
+            StopFlying();
+
+        // Play sound effect, TEMPORARY!!!
+        if (AudioManager.S != null)
+            AudioManager.S.Play("Chime");
+
+        // Turn the sprite gray to indicate trapped, TEMPORARY!!!
+        sprite.color = Color.gray;
+    }
+
+    private void FreeFromWeb()
+    {
+        trapped = false;
+
+        trappedWebCount = defaultWebCount;
+
+        // Play sound effect, TEMPORARY!!!
+        if (AudioManager.S != null)
+            AudioManager.S.Play("Chime");
+
+        // Turn the sprite white to indicate trapped, TEMPORARY!!!
+        sprite.color = Color.white;
     }
 }
