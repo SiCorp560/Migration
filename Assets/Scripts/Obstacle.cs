@@ -15,8 +15,12 @@ public class Obstacle : MonoBehaviour
 
     // Tracks whether this web is currently being broken
     private bool breaking = false;
+
     // Coroutine in control of the countdown timer
     private Coroutine breakTimer = null;
+
+    // Associated trapped butterfly
+    public GameObject butterfly;
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -80,6 +84,14 @@ public class Obstacle : MonoBehaviour
 
         // Destroy this when the last piece is destroyed
         if (pieces.Count == 0)
+        {
+            if (butterfly != null)
+            {
+                butterfly.GetComponent<FollowerBehavior>().InitialFree();
+            }
+
+            transform.DetachChildren();
             Destroy(gameObject);
+        }
     }
 }
