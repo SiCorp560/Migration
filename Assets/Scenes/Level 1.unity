@@ -17582,6 +17582,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 785822627012835808, guid: 98fc7af5326274e4fa5b3403cf3a8825, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2391082067673174155, guid: 98fc7af5326274e4fa5b3403cf3a8825, type: 3}
       propertyPath: m_Name
       value: uiCanvas
