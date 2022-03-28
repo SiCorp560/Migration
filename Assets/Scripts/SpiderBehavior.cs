@@ -5,6 +5,8 @@ using UnityEngine;
 public class SpiderBehavior : MonoBehaviour
 {
     private bool hunting = true;
+    private bool dropping = true;
+    public int moveSpeed;
     public GameObject trappedButterfly;
 
     public Rigidbody2D rb;
@@ -30,6 +32,7 @@ public class SpiderBehavior : MonoBehaviour
             }
             FallOffWeb();
         }
+        //DropDown();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -51,5 +54,10 @@ public class SpiderBehavior : MonoBehaviour
         hunting = false;
         rb.gravityScale = 1;
         Destroy(gameObject, 3.0f);
+    }
+
+    private void DropDown()
+    {
+        transform.position -= transform.up * Time.deltaTime * moveSpeed;
     }
 }
