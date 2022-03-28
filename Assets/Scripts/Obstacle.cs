@@ -20,7 +20,7 @@ public class Obstacle : MonoBehaviour
     private Coroutine breakTimer = null;
 
     // Associated trapped butterfly
-    public GameObject butterfly;
+    public GameObject trappedButterfly;
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -85,9 +85,9 @@ public class Obstacle : MonoBehaviour
         // Destroy this when the last piece is destroyed
         if (pieces.Count == 0)
         {
-            if (butterfly != null)
+            if (trappedButterfly != null)
             {
-                butterfly.GetComponent<FollowerBehavior>().InitialFree();
+                trappedButterfly.GetComponent<FollowerBehavior>().InitialFree();
             }
 
             transform.DetachChildren();

@@ -9,7 +9,7 @@ public class FollowerBehavior : MonoBehaviour
     public AIDestinationSetter destSet;
     public GameObject playerButterfly;
     private bool initialTrapped = true;
-    private bool trapped = true;
+    private bool trapped = false;
 
     // Start is called before the first frame update
     void Start()
@@ -35,16 +35,19 @@ public class FollowerBehavior : MonoBehaviour
 
     public void Trap(GameObject trapper)
     {
+        trapped = true;
         destSet.target = trapper.transform;
         aiPath.endReachedDistance = 0;
-        trapped = true;
+        aiPath.maxSpeed = 30;
     }
 
     public void Free()
     {
+        trapped = false;
         destSet.target = playerButterfly.transform;
         playerButterfly.GetComponent<PlayerFlyController>().followers.Add(gameObject);
         aiPath.endReachedDistance = 3;
+        aiPath.maxSpeed = 8;
     }
 
     public void InitialFree()
