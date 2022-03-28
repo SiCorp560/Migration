@@ -41,8 +41,8 @@ public class PlayerFlyController : MonoBehaviour
     public int maxStamina;  // Made public in order to manip thru editor
 
     // Used to track the player's flapping to create gusts
-    private int flapPower = 1;
     private bool flapping = false;
+    public int gustPower = 1;
 
     // Used to track the coroutine which controls the player's flight stamina
     private Coroutine flyingCoroutine = null;
@@ -50,10 +50,8 @@ public class PlayerFlyController : MonoBehaviour
     // Used to mark the stunned state after hit by water droplet
     private bool stunned = false;
 
-    // Used to mark trapped state after hit by spider
-    private bool trapped = false;
-    public int defaultWebCount;
-    private int trappedWebCount;
+    // All of the player's collected butterflies
+    public List<GameObject> followers;
 
     private void Awake()
     {
@@ -74,7 +72,6 @@ public class PlayerFlyController : MonoBehaviour
         }
 
         maxStamina = defaultStamina;
-        trappedWebCount = defaultWebCount;
     }
 
     private void StartFlying()
@@ -133,7 +130,7 @@ public class PlayerFlyController : MonoBehaviour
     private void Update()
     {
         // Update the player's current movement state
-        if (onGround && !stunned && !trapped)
+        if (onGround && !stunned)
         {
             // Stop flying if the butterfly touches the ground
             if (flying)
@@ -173,14 +170,7 @@ public class PlayerFlyController : MonoBehaviour
             }
 
             // Movement depends on the current state of the butterfly
-            if (trapped && Input.GetButtonDown("Flap"))
-            {
-                if (trappedWebCount > 0)
-                    trappedWebCount -= flapPower;
-                else
-                    FreeFromWeb();
-            }
-            else if (flying)
+            if (flying)
             {
                 // Make sure moving diagonally doesn't give you extra speed
                 Vector2 moveVector = new Vector2(xMove, yMove);
@@ -303,39 +293,5 @@ public class PlayerFlyController : MonoBehaviour
         {
             onGround = true;
         }
-        else if (collision.CompareTag("Spider"))
-        {
-            TrapInWeb();
-        }
-    }
-
-    private void TrapInWeb()
-    {
-        trapped = true;
-            
-        // If the player is flying, stop that
-        if (flying)
-            StopFlying();
-
-        // Play sound effect, TEMPORARY!!!
-        if (AudioManager.S != null)
-            AudioManager.S.Play("Chime");
-
-        // Turn the sprite gray to indicate trapped, TEMPORARY!!!
-        sprite.color = Color.gray;
-    }
-
-    private void FreeFromWeb()
-    {
-        trapped = false;
-
-        trappedWebCount = defaultWebCount;
-
-        // Play sound effect, TEMPORARY!!!
-        if (AudioManager.S != null)
-            AudioManager.S.Play("Chime");
-
-        // Turn the sprite white to indicate trapped, TEMPORARY!!!
-        sprite.color = Color.white;
     }
 }
