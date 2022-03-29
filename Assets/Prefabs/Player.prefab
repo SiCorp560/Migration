@@ -148,10 +148,12 @@ MonoBehaviour:
   gustParticles: {fileID: 6849668117003017828}
   moveSpeed: 8
   walkingSpeed: 3
+  glidingSpeed: 5
   defaultStamina: 0
   slowdownTime: 2
   maxStamina: 0
-  defaultWebCount: 0
+  gustPower: 1
+  followers: []
 --- !u!70 &6364540312237540368
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
