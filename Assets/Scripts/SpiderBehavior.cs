@@ -6,6 +6,7 @@ public class SpiderBehavior : MonoBehaviour
 {
     private bool hunting = true;
     private bool dropping = false;
+    private bool release = false;
     public Transform dropDest;
     public Transform rest;
     public Transform stop;
@@ -32,7 +33,7 @@ public class SpiderBehavior : MonoBehaviour
             FallOffWeb();
         }
 
-        if (hunting && dropping)
+        if (dropping)
         {
             transform.position = Vector2.MoveTowards(transform.position, dropDest.position, moveSpeed * Time.deltaTime);
         }
@@ -45,6 +46,8 @@ public class SpiderBehavior : MonoBehaviour
             List<GameObject> following = collision.gameObject.GetComponent<PlayerFlyController>().followers;
             if (following.Count > 0 && hunting)
             {
+                hunting = false;
+                release = true;
                 trappedButterfly = following[0];
                 following.RemoveAt(0);
                 trappedButterfly.GetComponent<FollowerBehavior>().Trap(gameObject);
@@ -62,10 +65,11 @@ public class SpiderBehavior : MonoBehaviour
 
     private void FallOffWeb()
     {
-        if (trappedButterfly != null)
+        if (trappedButterfly != null && release)
         {
             trappedButterfly.GetComponent<FollowerBehavior>().Free();
         }
+        release = false;
         hunting = false;
         rb.gravityScale = 1;
         Destroy(gameObject, 3.0f);
