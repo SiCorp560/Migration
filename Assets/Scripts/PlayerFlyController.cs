@@ -23,13 +23,14 @@ public class PlayerFlyController : MonoBehaviour
     // The speed of movement for the player (set in editor)
     public float moveSpeed;
     public float walkingSpeed; // Should be slower than normal movement
+    public float glidingSpeed; // Limit for speed when falling
 
     // Used to flip the player's sprite with direction of motion
     private bool left = true;
 
     // The current state of movement, reflected in the sprite
     /* 0: OnGround and not moving, 1: walking, 2: flying, 3: flapping */
-    private readonly int IDLE = 0, WALK = 1, FLY = 2, FLAP = 3;
+    private readonly int IDLE = 0, WALK = 1, FLY = 2, FLAP = 3, FALL = 4;
 
     // Used to track player's movement state during gameplay
     private bool flying = false;
@@ -77,7 +78,7 @@ public class PlayerFlyController : MonoBehaviour
     private void StartFlying()
     {
         // Turn off gravity for rigidbody and push up
-        rb.gravityScale = 0.0f;
+        // rb.gravityScale = 0.0f;
 
         // Set the state to flying
         onGround = false;
@@ -88,7 +89,7 @@ public class PlayerFlyController : MonoBehaviour
     private void StopFlying()
     {
         // Turn gravity on for the rigidbody
-        rb.gravityScale = 2.0f;
+        // rb.gravityScale = 2.0f;
 
         // Disable the flying variables
         flying = false;
@@ -97,6 +98,9 @@ public class PlayerFlyController : MonoBehaviour
         // Cancel any flapping (can't gust while out of stamina)
         if (flapping)
             StopFlapping();
+
+        // Signal the gliding animation (in air but not flying)
+        animator.SetInteger("state", FALL);
     }
 
     private void StartFlapping()
@@ -111,6 +115,9 @@ public class PlayerFlyController : MonoBehaviour
         gustCollider.enabled = true;
         gustParticles.Play();
         //gustObject.SetActive(true);
+
+        // Reset rigidbody velocities?
+        rb.velocity = Vector2.zero;
     }
 
     private void StopFlapping()
@@ -129,7 +136,6 @@ public class PlayerFlyController : MonoBehaviour
 
     private void Update()
     {
-        // Update the player's current movement state
         if (onGround && !stunned)
         {
             // Stop flying if the butterfly touches the ground
@@ -151,9 +157,7 @@ public class PlayerFlyController : MonoBehaviour
         if (flying && Input.GetButtonDown("Flap"))
             StartFlapping();
         else if (flapping && Input.GetButtonUp("Flap"))
-        {
             StopFlapping();
-        }
 
         // Player can't move while flapping
         if (!flapping)
@@ -178,17 +182,26 @@ public class PlayerFlyController : MonoBehaviour
                 // Directly update the player's velocity
                 rb.velocity = moveVector.normalized * moveSpeed;
 
+                // Make sure wind effect doesn't accelerate too much
+                if (rb.velocity.y < 0 && Mathf.Abs(rb.velocity.y) > glidingSpeed)
+                    rb.velocity = new Vector2(rb.velocity.x, -glidingSpeed);
+
                 // Update to the flying animation
                 animator.SetInteger("state", FLY);
             }
             else
             {
+                // Manually apply "gravity" up to terminal velocity cap
+                float yVelocity = rb.velocity.y;
+                yVelocity += -9.8f * Time.deltaTime;
+                float newY = -Mathf.Min(Mathf.Abs(yVelocity), glidingSpeed);
+
                 // Directly update the player's velocity, horizontally
-                rb.velocity = new Vector2(xMove * walkingSpeed, rb.velocity.y);
+                rb.velocity = new Vector2(xMove * walkingSpeed, newY);
 
                 // Update animation based on movement
                 if (!onGround)
-                    animator.SetInteger("state", FLY);
+                    animator.SetInteger("state", FALL);
                 else if (xMove == 0.0f)
                     animator.SetInteger("state", IDLE);
                 else

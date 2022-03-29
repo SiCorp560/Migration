@@ -6670,6 +6670,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6364540312237540369, guid: d381982a8d214264da94378f20c0fbe4, type: 3}
+      propertyPath: glidingSpeed
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6364540312237540371, guid: d381982a8d214264da94378f20c0fbe4, type: 3}
       propertyPath: m_Name
       value: Player
@@ -6716,6 +6720,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6364540312237540379, guid: d381982a8d214264da94378f20c0fbe4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6364540312237540381, guid: d381982a8d214264da94378f20c0fbe4, type: 3}
+      propertyPath: m_GravityScale
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
