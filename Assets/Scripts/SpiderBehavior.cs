@@ -18,13 +18,17 @@ public class SpiderBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (rb == null)
+        {
+            Debug.LogError("Spider doesn't have rigidbody component.");
+            rb = GetComponent<Rigidbody2D>();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (transform.parent == null && butterfly != null)
+        if (transform.parent == null)
         {
             FallOffWeb();
         }
@@ -46,7 +50,7 @@ public class SpiderBehavior : MonoBehaviour
                 release = true;
                 trappedButterfly = following[0];
                 following.RemoveAt(0);
-                butterfly.GetComponent<FollowerBehavior>().Trap(gameObject);
+                trappedButterfly.GetComponent<FollowerBehavior>().Trap(gameObject);
             }
         }
         else if (collision.CompareTag("SpiderRest"))
