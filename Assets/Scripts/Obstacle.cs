@@ -10,6 +10,9 @@ public class Obstacle : MonoBehaviour
     // The materials to switch between
     public Material defaultMat, windyMat;
 
+    // Overall web resistance compared to gust power
+    public int gustRes = 0;
+
     // The amount of time it takes to break one piece
     public float timeToBreak = 0.5f;
 
@@ -24,7 +27,7 @@ public class Obstacle : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!breaking && collision.CompareTag("Gust"))
+        if (!breaking && collision.CompareTag("Gust") && gustRes <= collision.gameObject.transform.parent.GetComponent<PlayerFlyController>().GustPower())
         {
             // Start breaking the obstacle
             StartBreakVisual();

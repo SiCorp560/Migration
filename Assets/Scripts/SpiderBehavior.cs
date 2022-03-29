@@ -5,7 +5,10 @@ using UnityEngine;
 public class SpiderBehavior : MonoBehaviour
 {
     private bool hunting = true;
-    private bool dropping = true;
+    private bool dropping = false;
+    public Transform dropDest;
+    public Transform rest;
+    public Transform stop;
     public int moveSpeed;
     public GameObject trappedButterfly;
 
@@ -26,13 +29,13 @@ public class SpiderBehavior : MonoBehaviour
     {
         if (transform.parent == null)
         {
-            if (trappedButterfly != null)
-            {
-                trappedButterfly.GetComponent<FollowerBehavior>().Free();
-            }
             FallOffWeb();
         }
-        //DropDown();
+
+        if (hunting && dropping)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, dropDest.position, moveSpeed * Time.deltaTime);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -47,17 +50,33 @@ public class SpiderBehavior : MonoBehaviour
                 trappedButterfly.GetComponent<FollowerBehavior>().Trap(gameObject);
             }
         }
+        else if (collision.CompareTag("SpiderRest"))
+        {
+            dropping = false;
+        }
+        else if (collision.CompareTag("SpiderStop"))
+        {
+            dropDest = rest;
+        }
     }
 
     private void FallOffWeb()
     {
+        if (trappedButterfly != null)
+        {
+            trappedButterfly.GetComponent<FollowerBehavior>().Free();
+        }
         hunting = false;
         rb.gravityScale = 1;
         Destroy(gameObject, 3.0f);
     }
 
-    private void DropDown()
+    public void StartDrop()
     {
-        transform.position -= transform.up * Time.deltaTime * moveSpeed;
+        if (!dropping)
+        {
+            dropping = true;
+            dropDest = stop;
+        }
     }
 }

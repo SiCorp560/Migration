@@ -42,7 +42,6 @@ public class PlayerFlyController : MonoBehaviour
 
     // Used to track the player's flapping to create gusts
     private bool flapping = false;
-    public int gustPower = 1;
 
     // Used to track the coroutine which controls the player's flight stamina
     private Coroutine flyingCoroutine = null;
@@ -293,5 +292,10 @@ public class PlayerFlyController : MonoBehaviour
         {
             onGround = true;
         }
+    }
+
+    public int GustPower()
+    {
+        return followers.Count;
     }
 }
