@@ -8,6 +8,7 @@ public class FollowerBehavior : MonoBehaviour
     public AIPath aiPath;
     public AIDestinationSetter destSet;
     public GameObject playerButterfly;
+    public Animator animator;
     private bool initialTrapped = true;
     private bool trapped = false;
 
@@ -15,6 +16,12 @@ public class FollowerBehavior : MonoBehaviour
     void Start()
     {
         aiPath.enabled = false;
+
+        if (animator == null)
+        {
+            Debug.LogError("Follower doesn't have sprite renderer component.");
+            animator = GetComponent<Animator>();
+        }
     }
 
     // Update is called once per frame
@@ -31,6 +38,8 @@ public class FollowerBehavior : MonoBehaviour
                 transform.localScale = new Vector3(2f, 2f, 2f);
             }
         }
+
+        animator.SetBool("trapped", initialTrapped || trapped);
     }
 
     public void Trap(GameObject trapper)

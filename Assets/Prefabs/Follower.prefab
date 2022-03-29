@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  target: {fileID: 0}
+  target: {fileID: 6364540312237540379, guid: d381982a8d214264da94378f20c0fbe4, type: 3}
 --- !u!58 &3287888621127858128
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -221,4 +221,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiPath: {fileID: 3287888621127858132}
   destSet: {fileID: 3287888621127858135}
-  playerButterfly: {fileID: 0}
+  playerButterfly: {fileID: 6364540312237540371, guid: d381982a8d214264da94378f20c0fbe4, type: 3}
+  animator: {fileID: 3287888621127858130}
