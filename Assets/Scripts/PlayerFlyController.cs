@@ -77,6 +77,7 @@ public class PlayerFlyController : MonoBehaviour
         }
 
         maxStamina = defaultStamina;
+        timeLeft = maxStamina + slowdownTime;
     }
 
     private void StartFlying()
