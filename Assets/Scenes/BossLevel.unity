@@ -21538,7 +21538,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6364540312237540369, guid: d381982a8d214264da94378f20c0fbe4, type: 3}
       propertyPath: defaultStamina
-      value: 3
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6364540312237540371, guid: d381982a8d214264da94378f20c0fbe4, type: 3}
       propertyPath: m_Name
