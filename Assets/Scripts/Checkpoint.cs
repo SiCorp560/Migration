@@ -6,6 +6,8 @@ public class Checkpoint : MonoBehaviour
 {
     // The sprite renderer component which controls the checkpoint sprite
     public SpriteRenderer sprite;
+    // The animator component which animates the sprite
+    public Animator animator;
 
     // Marks the final checkpoint at the end of the level (set in editor)
     public bool finalCheckpoint;
@@ -29,9 +31,15 @@ public class Checkpoint : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && !active)
         {
+            // Activate this checkpoint (can't be re-activated)
             active = true;
+
+            // Spawn the particle effect
             GameObject particles = Instantiate(particlePrefab, transform.position, Quaternion.identity);
             Destroy(particles, 1.0f);
+
+            // Trigger the animation
+            animator.SetTrigger("Active");
 
             // Tell GameManager that player reached a checkpoint
             GameManager.S.TriggerCheckpoint(transform, finalCheckpoint);

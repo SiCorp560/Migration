@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2947547991934194560}
   - component: {fileID: 2947547991934194561}
+  - component: {fileID: 6915899376564031457}
   - component: {fileID: 2947547991934194566}
   - component: {fileID: 2947547991934194567}
   m_Layer: 0
@@ -26,9 +27,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2947547991934194564}
-  m_LocalRotation: {x: -0, y: -0, z: -0.0041097356, w: 0.9999916}
-  m_LocalPosition: {x: -8.91, y: 25.83, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 1910558865
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 49a21dd497a8495429228b227978d799, type: 3}
+  m_Sprite: {fileID: 21300000, guid: aabc0819f72bfc849aeaeb62a994aaee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,6 +85,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &6915899376564031457
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2947547991934194564}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cd312a64b79dcc24ca80291d655b1eca, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!61 &2947547991934194566
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -97,18 +117,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.22, y: 0}
+  m_Offset: {x: -0.2, y: -0.18}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 0.81, y: 0.99}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.56, y: 0.99}
+  m_Size: {x: 0.85, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &2947547991934194567
 MonoBehaviour:
@@ -123,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 2947547991934194561}
+  animator: {fileID: 6915899376564031457}
   finalCheckpoint: 0
   active: 0
   particlePrefab: {fileID: 5685501823901205739, guid: 45eb2530c33d84f42adbaee5d29618c3, type: 3}
