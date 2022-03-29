@@ -5,8 +5,16 @@ using UnityEngine;
 public class SpiderBehavior : MonoBehaviour
 {
     private bool hunting = true;
-    public GameObject butterfly;
-    
+    private bool dropping = false;
+    private bool release = false;
+    public Transform dropDest;
+    public Transform rest;
+    public Transform stop;
+    public int moveSpeed;
+    public GameObject trappedButterfly;
+
+    public Rigidbody2D rb;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +26,12 @@ public class SpiderBehavior : MonoBehaviour
     {
         if (transform.parent == null && butterfly != null)
         {
-            butterfly.GetComponent<FollowerBehavior>().Free();
+            FallOffWeb();
+        }
+
+        if (dropping)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, dropDest.position, moveSpeed * Time.deltaTime);
         }
     }
 
@@ -29,10 +42,41 @@ public class SpiderBehavior : MonoBehaviour
             List<GameObject> following = collision.gameObject.GetComponent<PlayerFlyController>().followers;
             if (following.Count > 0 && hunting)
             {
-                butterfly = following[0];
+                hunting = false;
+                release = true;
+                trappedButterfly = following[0];
                 following.RemoveAt(0);
                 butterfly.GetComponent<FollowerBehavior>().Trap(gameObject);
             }
+        }
+        else if (collision.CompareTag("SpiderRest"))
+        {
+            dropping = false;
+        }
+        else if (collision.CompareTag("SpiderStop"))
+        {
+            dropDest = rest;
+        }
+    }
+
+    private void FallOffWeb()
+    {
+        if (trappedButterfly != null && release)
+        {
+            trappedButterfly.GetComponent<FollowerBehavior>().Free();
+        }
+        release = false;
+        hunting = false;
+        rb.gravityScale = 1;
+        Destroy(gameObject, 3.0f);
+    }
+
+    public void StartDrop()
+    {
+        if (!dropping)
+        {
+            dropping = true;
+            dropDest = stop;
         }
     }
 }
