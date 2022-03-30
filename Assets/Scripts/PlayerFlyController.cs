@@ -117,6 +117,16 @@ public class PlayerFlyController : MonoBehaviour
         // Signal the flapping animation
         animator.SetInteger("state", FLAP);
 
+        // Signal the flapping animation for any followers
+        if (followers != null && followers.Count > 0)
+        {
+            foreach (GameObject follower in followers)
+            {
+                FollowerBehavior fb = follower.GetComponent<FollowerBehavior>();
+                fb.animator.SetBool("flapping", true);
+            }
+        }
+
         // Enable the gust (collider, visual effects)
         gustCollider.enabled = true;
         gustParticles.Play();
@@ -133,6 +143,16 @@ public class PlayerFlyController : MonoBehaviour
 
         // Signal the flapping animation to stop
         animator.SetInteger("state", FLY);
+
+        // Signal the flapping animation to stop for any followers
+        if (followers != null && followers.Count > 0)
+        {
+            foreach (GameObject follower in followers)
+            {
+                FollowerBehavior fb = follower.GetComponent<FollowerBehavior>();
+                fb.animator.SetBool("flapping", false);
+            }
+        }
 
         // Disable the gust (collider, visual effects)
         gustCollider.enabled = false;
