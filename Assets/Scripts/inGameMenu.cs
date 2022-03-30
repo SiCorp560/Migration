@@ -98,13 +98,17 @@ public class inGameMenu : MonoBehaviour
     {
         SceneManager.LoadScene(nextLevelName);
 
-        // Temporary, just to show off new music
         if (nextLevelName.Equals("Level 1"))
         {
-            AudioManager.S?.Pause("Background Music");
+            AudioManager.S?.Pause("TitleMusic");
+            AudioManager.S?.Play("Level 1");
+        }
+        else if (nextLevelName.Equals("Level 2"))
+        {
+            AudioManager.S?.Pause("Level 1");
             AudioManager.S?.Play("Level 2");
         }
-        if (nextLevelName.Equals("Level 2"))
+        else if (nextLevelName.Equals("Level 3"))
         {
             AudioManager.S?.Pause("Level 2");
             AudioManager.S?.Play("Level 3");

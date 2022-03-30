@@ -229,7 +229,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
@@ -965,7 +964,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - name: BackgroundMusic
+  - name: TitleMusic
     clip: {fileID: 8300000, guid: fc6b005df17ec5d48aecbbc5210249be, type: 3}
     volume: 0.25
     pitch: 1
@@ -1018,6 +1017,12 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     loop: 0
+    source: {fileID: 0}
+  - name: Level 1
+    clip: {fileID: 8300000, guid: e9734079d3879e742a73d8c2078b7773, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
     source: {fileID: 0}
   - name: Level 2
     clip: {fileID: 8300000, guid: 20f9bc558dd9afb44bb9d6558257126e, type: 3}

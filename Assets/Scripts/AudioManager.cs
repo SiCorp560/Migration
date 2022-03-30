@@ -31,7 +31,7 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        S.Play("BackgroundMusic");
+        S.Play("TitleMusic");
         S.Play("AmbienceBirds");
         S.Play("AmbienceInsects");
     }
