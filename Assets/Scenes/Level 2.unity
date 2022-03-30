@@ -7507,7 +7507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8009534010274648703, guid: 96092058dd285a449b5380ca4f4e5440, type: 3}
       propertyPath: windForce
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8009534010274648703, guid: 96092058dd285a449b5380ca4f4e5440, type: 3}
       propertyPath: direction.y
