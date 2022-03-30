@@ -1008,8 +1008,8 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Droplet
     clip: {fileID: 8300000, guid: 3f4f97ff76663414faca4c975c75ea82, type: 3}
-    volume: 1
-    pitch: 1
+    volume: 0.1
+    pitch: 0.7
     loop: 0
     source: {fileID: 0}
   - name: MysteriousJingle

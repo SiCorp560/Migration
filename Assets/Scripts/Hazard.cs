@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Hazard : MonoBehaviour
 {
+    // The radius within which the player can hear water droplet sounds
+    public float soundRadius = 20.0f;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -15,10 +17,13 @@ public class Hazard : MonoBehaviour
                 flyPlayer.KnockDown();
         }
 
-        // TODO: Right now, can hear all water droplets in the level
         // Play the sound of water droplet colliding
-        //if (AudioManager.S != null)
-        //    AudioManager.S.Play("Droplet");
+        if (PlayerFlyController.player != null 
+            && Vector3.Distance(PlayerFlyController.player.transform.position, transform.position) < soundRadius)
+        {
+            if (AudioManager.S != null)
+                AudioManager.S.Play("Droplet");
+        }
 
         // Always destroy the water when it collides with something
         Destroy(gameObject);
