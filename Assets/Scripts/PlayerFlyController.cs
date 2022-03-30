@@ -208,9 +208,7 @@ public class PlayerFlyController : MonoBehaviour
 
             // Player still gets pushed by the wind
             if (inWind)
-            {
                 rb.velocity = windEffect;
-            }
         }
         else
         {
@@ -236,12 +234,16 @@ public class PlayerFlyController : MonoBehaviour
                 {
                     // Uses stamina when flying horizontally or up
                     usingStamina = true;
-                    animator.SetInteger("state", FLY);
                 }
-                else if (yMove == -1.0f)
+
+                if (yMove == -1.0f)
                 {
-                    // If only moving down, don't use stamina, just glide
+                    // If moving down, don't use stamina, just glide
                     animator.SetInteger("state", FALL);
+                }
+                else
+                {
+                    animator.SetInteger("state", FLY);
                 }
 
                 // Make sure moving diagonally doesn't give you extra speed

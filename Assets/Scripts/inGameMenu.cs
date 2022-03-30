@@ -98,18 +98,31 @@ public class inGameMenu : MonoBehaviour
     {
         SceneManager.LoadScene(nextLevelName);
 
+        if (nextLevelName.Equals("TitleScreen"))
+        {
+            AudioManager.S?.Pause("Level 1");
+            AudioManager.S?.Pause("Level 2");
+            AudioManager.S?.Pause("Level 3");
+            AudioManager.S?.Play("TitleMusic");
+        }
         if (nextLevelName.Equals("Level 1"))
         {
             AudioManager.S?.Pause("TitleMusic");
+            AudioManager.S?.Pause("Level 2");
+            AudioManager.S?.Pause("Level 3");
             AudioManager.S?.Play("Level 1");
         }
         else if (nextLevelName.Equals("Level 2"))
         {
+            AudioManager.S?.Pause("TitleMusic");
             AudioManager.S?.Pause("Level 1");
+            AudioManager.S?.Pause("Level 3");
             AudioManager.S?.Play("Level 2");
         }
         else if (nextLevelName.Equals("Level 3"))
         {
+            AudioManager.S?.Pause("TitleMusic");
+            AudioManager.S?.Pause("Level 1");
             AudioManager.S?.Pause("Level 2");
             AudioManager.S?.Play("Level 3");
         }
