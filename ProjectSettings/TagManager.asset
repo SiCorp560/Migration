@@ -8,6 +8,8 @@ TagManager:
   - Ground
   - Spider
   - Gust
+  - SpiderRest
+  - SpiderStop
   layers:
   - Default
   - TransparentFX

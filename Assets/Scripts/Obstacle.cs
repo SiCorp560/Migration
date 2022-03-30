@@ -10,17 +10,24 @@ public class Obstacle : MonoBehaviour
     // The materials to switch between
     public Material defaultMat, windyMat;
 
+    // Overall web resistance compared to gust power
+    public int gustRes = 0;
+
     // The amount of time it takes to break one piece
     public float timeToBreak = 0.5f;
 
     // Tracks whether this web is currently being broken
     private bool breaking = false;
+
     // Coroutine in control of the countdown timer
     private Coroutine breakTimer = null;
 
+    // Associated trapped butterfly
+    public GameObject trappedButterfly;
+
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!breaking && collision.CompareTag("Gust"))
+        if (!breaking && collision.CompareTag("Gust") && gustRes <= collision.gameObject.transform.parent.GetComponent<PlayerFlyController>().GustPower())
         {
             // Start breaking the obstacle
             StartBreakVisual();
@@ -80,6 +87,14 @@ public class Obstacle : MonoBehaviour
 
         // Destroy this when the last piece is destroyed
         if (pieces.Count == 0)
+        {
+            if (trappedButterfly != null)
+            {
+                trappedButterfly.GetComponent<FollowerBehavior>().InitialFree();
+            }
+
+            transform.DetachChildren();
             Destroy(gameObject);
+        }
     }
 }

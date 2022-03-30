@@ -865,7 +865,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 2
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -4814,8 +4814,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5206819196527351936}
-  - component: {fileID: 5206819196527351943}
   - component: {fileID: 5206819196527351942}
+  - component: {fileID: 8009534010274648703}
   m_Layer: 0
   m_Name: New Wind Zone
   m_TagString: Untagged
@@ -4838,26 +4838,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!249 &5206819196527351943
-AreaEffector2D:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5206819196527351941}
-  m_Enabled: 1
-  m_UseColliderMask: 1
-  m_ColliderMask:
-    serializedVersion: 2
-    m_Bits: 64
-  m_UseGlobalAngle: 0
-  m_ForceAngle: 90
-  m_ForceMagnitude: 200
-  m_ForceVariation: 0
-  m_ForceTarget: 0
-  m_Drag: 0
-  m_AngularDrag: 0
 --- !u!61 &5206819196527351942
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4869,7 +4849,7 @@ BoxCollider2D:
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_UsedByEffector: 1
+  m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 1.5}
   m_SpriteTilingProperty:
@@ -4884,3 +4864,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 10, y: 15}
   m_EdgeRadius: 0
+--- !u!114 &8009534010274648703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5206819196527351941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2753b7c16fe94d6f96bac1e5c8f1c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: {x: 0, y: 0}
+  windForce: 4

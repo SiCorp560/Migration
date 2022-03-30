@@ -4,45 +4,45 @@ using UnityEngine;
 
 public class WindEffect : MonoBehaviour
 {
-    public Vector3 direction = Vector3.left;
-    public int windSpeed = 3;
-    private List<GameObject> objects = new List<GameObject>();
+    // The direction that the wind should be applied in
+    public Vector2 direction = Vector2.left;
+    // The force of the wind
+    public float windForce = 3;
 
-    // FixedUpdate is called once per fixed frame
-    void FixedUpdate()
-    {
-        for(int i = 0; i < objects.Count; i++)
-        {
-            if (objects[i].CompareTag("Player"))
-            {
-                PlayerFlyController flyPlayer = objects[i].GetComponent<PlayerFlyController>();
-                if (flyPlayer != null && flyPlayer.IsStunned())
-                {
-                    windSpeed = 10;
-                }
-                else
-                {
-                    windSpeed = 3;
-                }
-            }
-            direction.Normalize();
-            objects[i].transform.position += direction * windSpeed * Time.deltaTime;
-        }
-    }
+    // Whether player is currently within zone and should be affected
+    private bool inWind = false;
+
   
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && !inWind)
         {
-            objects.Add(collision.gameObject);
+            // Activate this wind effect
+            inWind = true;
+
+            if (PlayerFlyController.player != null)
+            {
+                // The acceleration force to apply to the player
+                Vector2 windVector = direction * windForce;
+
+                // Tell the player controller to apply wind force
+                PlayerFlyController.player.StartWind(windVector);
+            }
         }
     }
   
     void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && inWind)
         {
-            objects.Remove(collision.gameObject);
+            // De-activate this wind effect
+            inWind = false;
+
+            if (PlayerFlyController.player != null)
+            {
+                // Tell the player controller to stop applying wind force
+                PlayerFlyController.player.StopWind();
+            }
         }
     }
 }
