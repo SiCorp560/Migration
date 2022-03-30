@@ -21841,6 +21841,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: New Wind Zone (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8009534010274648703, guid: 96092058dd285a449b5380ca4f4e5440, type: 3}
+      propertyPath: direction.x
+      value: -1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96092058dd285a449b5380ca4f4e5440, type: 3}
 --- !u!4 &991319879 stripped
@@ -33141,6 +33145,10 @@ PrefabInstance:
     - target: {fileID: 5206819196527351941, guid: 96092058dd285a449b5380ca4f4e5440, type: 3}
       propertyPath: m_Name
       value: New Wind Zone
+      objectReference: {fileID: 0}
+    - target: {fileID: 8009534010274648703, guid: 96092058dd285a449b5380ca4f4e5440, type: 3}
+      propertyPath: direction.x
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96092058dd285a449b5380ca4f4e5440, type: 3}
