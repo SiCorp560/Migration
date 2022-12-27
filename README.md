@@ -11,7 +11,7 @@ Project 2 for CMU course 53-471: Game Design, Prototyping and Production.
 - [Haley Carter](https://github.com/hcarter20): Programming
 
 ## RUN DIRECTIONS
-- Windows: Run the provided **_FinalProject.exe_** file.
+- Windows: Run the provided **_Platformer.exe_** file.
 
 ## RELEASE NOTES:
 ### Version 1, Preliminary Build: 
